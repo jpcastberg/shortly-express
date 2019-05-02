@@ -15,6 +15,7 @@ app.use(partials());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(parseCookies);
+app.use(Auth);
 app.use(express.static(path.join(__dirname, '../public')));
 
 
