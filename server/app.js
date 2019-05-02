@@ -90,6 +90,33 @@ app.post('/signup', (req, res) => {
     });
 });
 
+app.post('/login', (req, res) => {
+  const loginAttempt = req.body;
+  const passwordAttempt = loginAttempt.password;
+  const { username } = loginAttempt;
+  //get data for user
+  models.Users.get({username})
+    .then((userDataFromDB) => {
+      // Redirect user to login if username does not exist
+      if (!userDataFromDB) {
+        res.redirect('/login');
+      } else {
+        const { salt, password } = userDataFromDB;
+        // Compare passwords and handle appropriately
+        const passwordsDoMatch = models.Users.compare(passwordAttempt, password, salt);
+        if (passwordsDoMatch) {
+          res.redirect('/');
+        } else {
+          res.redirect('/login');
+        }
+      }
+    })
+    .catch((err) => {
+      console.error('ERROR FINDING USER', err);
+      res.redirect('/login');
+    });
+});
+
 /************************************************************/
 // Handle the code parameter route last - if all other routes fail
 // assume the route is a short code and try and handle it here.
