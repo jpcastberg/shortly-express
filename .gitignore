@@ -3,6 +3,9 @@ db/*.sqlite
 *.DS_Store
 docs
 
+# Config
+config/mysql.js
+
 # Floobits
 .floo
 .floobit

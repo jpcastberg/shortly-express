@@ -5,6 +5,7 @@ var httpMocks = require('node-mocks-http');
 
 var app = require('../server/app.js');
 var schema = require('../server/db/config.js');
+const mysqlCredentials = require('../config/mysqlCredentials.js');
 var port = 4568;
 
 /************************************************************/
@@ -39,8 +40,8 @@ describe('', function() {
     /* TODO: Update user and password if different than on your local machine            */
     /*************************************************************************************/
     db = mysql.createConnection({
-      user: 'student',
-      password: 'student',
+      user: mysqlCredentials.username,
+      password: mysqlCredentials.password,
       database: 'shortly'
     });
 
