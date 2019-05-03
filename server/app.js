@@ -83,9 +83,17 @@ app.post('/links',
 
 app.post('/signup', (req, res) => {
   const newUser = req.body;
+  const { shortlyid } = req.cookies;
   models.Users.create(newUser)
-    .then((user) => {
-      res.redirect('/');
+    .then((conf) => {
+      const { insertId } = conf;
+      models.Sessions.update({ hash: shortlyid }, { userId: insertId })
+        .then((conf) => {
+          res.redirect('/');
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     })
     .catch((err) => {
       // Handle duplicate user
@@ -97,6 +105,7 @@ app.post('/login', (req, res) => {
   const loginAttempt = req.body;
   const passwordAttempt = loginAttempt.password;
   const { username } = loginAttempt;
+  const { shortlyid } = req.cookies;
   //get data for user
   models.Users.get({username})
     .then((userDataFromDB) => {
@@ -104,11 +113,17 @@ app.post('/login', (req, res) => {
       if (!userDataFromDB) {
         res.redirect('/login');
       } else {
-        const { salt, password } = userDataFromDB;
+        const { salt, password, id } = userDataFromDB;
         // Compare passwords and handle appropriately
         const passwordsDoMatch = models.Users.compare(passwordAttempt, password, salt);
         if (passwordsDoMatch) {
-          res.redirect('/');
+          models.Sessions.update({ hash: shortlyid }, { userId: id })
+            .then((conf) => {
+              res.redirect('/');
+            })
+            .catch((err) => {
+              console.error(err);
+            });
         } else {
           res.redirect('/login');
         }

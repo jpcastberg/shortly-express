@@ -6,7 +6,7 @@ var httpMocks = require('node-mocks-http');
 var app = require('../server/app.js');
 var schema = require('../server/db/config.js');
 const mysqlCredentials = require('../config/mysqlCredentials.js');
-var port = 4569;
+var port = 4568;
 
 /************************************************************/
 // Mocha doesn't have a way to designate pending before blocks.
@@ -481,7 +481,7 @@ describe('', function() {
     });
   });
 
-  xdescribe('Sessions and cookies', function() {
+  describe('Sessions and cookies', function() {
     var requestWithSession;
     var cookieJar;
 
