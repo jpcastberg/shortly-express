@@ -16,6 +16,7 @@ module.exports.createSession = (req, res, next) => {
           })
           .then((newSessionData) => {
             req.session = newSessionData;
+            req.cookies.shortlyid = newSessionData.hash;
             res.cookie('shortlyid', newSessionData.hash);
             next();
           })
